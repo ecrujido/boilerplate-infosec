@@ -8,6 +8,91 @@ var app = express();
 app.disable("x-powered-by");
 var fs = require("fs");
 var path = require("path");
+var bcrypt = require('bcrypt');
+
+
+const plaintextPassword = 'passw0rd!';
+const hashedPassword = '$2a$12$Y.PHPE15wR25qrrtgGkiYe2sXo98cjuMCG1YwSI5rJW1DSJp0gEYS';
+const saltRounds = 13;
+
+
+// async function hashPassword(password) {
+//   try {
+//       const hash = await bcrypt.hash(password, saltRounds);
+//       console.log(hash);
+//       return hash;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
+
+
+// async function comparePasswords(plaintext, hash) {
+//   try {
+//       const match = await bcrypt.compare(plaintext, hash);
+//       return match;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
+
+
+// // Example usage
+// (async () => {
+//   try {
+//       // Hashing a password
+//       const hashedPassword = await hashPassword(plaintextPassword);
+//       console.log('Hashed password:', hashedPassword);
+
+//       // Comparing a password with its hash
+//       const match = await comparePasswords(plaintextPassword, hashedPassword);
+//       if (match) {
+//           console.log('Passwords match!');
+//       } else {
+//           console.log('Passwords do not match!');
+//       }
+//   } catch (error) {
+//       console.error('Error:', error);
+//   }
+// })();
+
+
+function hashPasswordSync(password) {
+  try {
+      var hash = bcrypt.hashSync(password, saltRounds);
+      console.log(hash);
+      return hash;
+  } catch (error) {
+      throw error;
+  }
+}
+
+function comparePasswordsSync(plaintext, hash) {
+  try {
+    var result = bcrypt.compareSync(plaintext, hash);
+    return result;
+  } catch (error) {
+      throw error;
+  }
+}
+
+// Example usage
+try {
+  // Hashing a password
+  const hashedPassword = hashPasswordSync(plaintextPassword);
+  console.log('Hashed password:', hashedPassword);
+
+  // Comparing a password with its hash
+  const match = comparePasswordsSync(plaintextPassword, hashedPassword);
+  if (match) {
+      console.log('Passwords match!');
+  } else {
+      console.log('Passwords do not match!');
+  }
+} catch (error) {
+  console.error('Error:', error);
+}
+
 
 app.use(function (req, res, next) {
   res.set({
