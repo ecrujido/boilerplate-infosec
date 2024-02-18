@@ -57,41 +57,90 @@ const saltRounds = 13;
 // })();
 
 
-function hashPasswordSync(password) {
-  try {
-      var hash = bcrypt.hashSync(password, saltRounds);
-      console.log(hash);
-      return hash;
-  } catch (error) {
-      throw error;
-  }
-}
+// ================================================================
 
-function comparePasswordsSync(plaintext, hash) {
-  try {
-    var result = bcrypt.compareSync(plaintext, hash);
-    return result;
-  } catch (error) {
-      throw error;
-  }
-}
+
+// function hashPasswordSync(password) {
+//   try {
+//       var hash = bcrypt.hashSync(password, saltRounds);
+//       console.log(hash);
+//       return hash;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
+
+// function comparePasswordsSync(plaintext, hash) {
+//   try {
+//     var result = bcrypt.compareSync(plaintext, hash);
+//     return result;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
 
 // Example usage
-try {
+// try {
   // Hashing a password
-  const hashedPassword = hashPasswordSync(plaintextPassword);
-  console.log('Hashed password:', hashedPassword);
+  // const hashedPassword = hashPasswordSync(plaintextPassword);
+  // console.log('Hashed password:', hashedPassword);
 
   // Comparing a password with its hash
-  const match = comparePasswordsSync(plaintextPassword, hashedPassword);
-  if (match) {
-      console.log('Passwords match!');
-  } else {
-      console.log('Passwords do not match!');
+//   const match = comparePasswordsSync(plaintextPassword, hashedPassword);
+//   if (match) {
+//       console.log('Passwords match!');
+//   } else {
+//       console.log('Passwords do not match!');
+//   }
+// } catch (error) {
+//   console.error('Error:', error);
+// }
+
+
+// ================================================================
+
+
+// bcrypt.hash('passw0rd!', 13, async (err, hash) => {
+//   try {
+//     console.log(hash);
+//   //$2a$12$Y.PHPE15wR25qrrtgGkiYe2sXo98cjuMCG1YwSI5rJW1DSJp0gEYS
+//     bcrypt.compare('myPlaintextPassword', hash, (err, res) => {
+//       console.log(res); //true
+//     });
+//   } catch(error) {
+//     console.log('Error: ', error);
+//   }
+
+// });
+
+
+const myPlaintextPassword = 'passw0rd!';
+
+// Hash the plaintext password asynchronously
+bcrypt.hash(myPlaintextPassword, saltRounds, async (err, hash) => {
+  try {
+    // Log the completed hash to the console
+    console.log('Hash:', hash);
+
+    // Simulate storing the hash in your database
+    // (In a real server, you would save the hash in your database)
+
+    // Compare the plaintext password with the generated hash
+    bcrypt.compare(myPlaintextPassword, hash, (err, res) => {
+      // Log the result of the comparison to the console
+      console.log('Comparison Result:', res); // Should be true
+    });
+
+    // Testing with a different plaintext password
+    const someOtherPlaintextPassword = 'someOtherPlaintextPassword';
+    bcrypt.compare(someOtherPlaintextPassword, hash, (err, res) => {
+      // Log the result of the comparison to the console
+      console.log('Comparison Result with Different Password:', res); // Should be false
+    });
+  } catch(error) {
+    console.log('Error: ', error);
   }
-} catch (error) {
-  console.error('Error:', error);
-}
+});
 
 
 app.use(function (req, res, next) {
